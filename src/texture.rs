@@ -3,7 +3,7 @@ use std::path::Path;
 use gl;
 use gl::types::*;
 use image;
-use image::GenericImage;
+use image::GenericImageView;
 
 #[derive(Debug)]
 pub struct Texture {

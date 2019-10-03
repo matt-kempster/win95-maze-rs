@@ -2,7 +2,7 @@ extern crate gl;
 extern crate glfw;
 extern crate image;
 extern crate cgmath;
-extern crate rand;
+use maze::{random, random_f32};
 
 mod util;
 mod ico;
@@ -221,7 +221,7 @@ fn gen_walls(maze: &Maze)  -> Vec<Wall> {
     let mut walls = Vec::new();
 
     fn get_rand_tex() -> TexType {
-        if rand::random::<f32>() < 0.9 {
+        if random_f32() < 0.9 {
             TexType::Brick
         } else {
             TexType::Thing
@@ -306,13 +306,26 @@ fn gen_walls(maze: &Maze)  -> Vec<Wall> {
     walls
 }
 
+fn sample_indices(total: usize, count: usize) -> Vec<usize> {
+    let mut vec = Vec::new();
+    while vec.len() < count {
+        let candidate = (random() % (total as u64)) as usize;
+        if !vec.contains(&candidate) {
+            vec.push(candidate);
+        }
+    }
+    vec
+}
+
 fn gen_icos(maze: &Maze) -> HashMap<(usize, usize), Ico> {
     // let's say there is 6% of tiles with an icosahedron
     let total = maze.width * maze.height;
     let count = cmp::max(6 * total / 100, 2);
-    let indices = rand::seq::sample_indices(
-        &mut rand::thread_rng(), total, count);
-    let rnd_f = || rand::random::<f32>() * 2.0 - 1.0;
+    // let indices = rand::seq::sample_indices(
+    //     &mut rand::thread_rng(), total, count);
+    // let rnd_f = || rand::random::<f32>() * 2.0 - 1.0;
+    let indices = sample_indices(total, count);
+    let rnd_f = || random_f32() * 2.0 - 1.0;
 
     let mut icos = HashMap::new();
 
@@ -336,8 +349,9 @@ fn gen_rats(maze: &Maze) -> Vec<Rat> {
     // let's say there is 2% of tiles with a rat initially
     let total = maze.width * maze.height;
     let count = cmp::max(2 * total / 100, 2);
-    let indices = rand::seq::sample_indices(
-        &mut rand::thread_rng(), total, count);
+    // let indices = rand::seq::sample_indices(
+    //     &mut rand::thread_rng(), total, count);
+    let indices = sample_indices(total, count);
 
     let mut vec = Vec::new();
 
@@ -357,10 +371,10 @@ fn gen_rats(maze: &Maze) -> Vec<Rat> {
 
 unsafe fn set_up_textures() -> HashMap<TexType, Texture> {
     let mut textures = HashMap::new();
-    textures.insert(TexType::Brick, Texture::new("resources/brick.bmp", 0));
-    textures.insert(TexType::Thing, Texture::new("resources/thing.bmp", 1));
-    textures.insert(TexType::Ceiling, Texture::new("resources/ceiling.bmp", 2));
-    textures.insert(TexType::Floor, Texture::new("resources/floor.bmp", 3));
+    textures.insert(TexType::Brick, Texture::new("resources/aisle5.bmp", 0));
+    textures.insert(TexType::Thing, Texture::new("resources/restroom2.bmp", 1));
+    textures.insert(TexType::Ceiling, Texture::new("resources/ceiling3.bmp", 2));
+    textures.insert(TexType::Floor, Texture::new("resources/floor2.bmp", 3));
     textures.insert(TexType::Rat, Texture::new("resources/rat.bmp", 4));
 
     for (_, texture) in &textures {

@@ -1,7 +1,7 @@
 use cgmath::prelude::*;
 use cgmath::{Matrix3, Point3, vec3, Vector3, Rad};
 
-const MOVE_SPEED: f32 = 2.0;
+const MOVE_SPEED: f32 = 1.5;
 const TURN_SPEED: f32 = 2.5;
 
 pub struct Camera {
@@ -50,19 +50,39 @@ impl Camera {
     }
 
     pub fn move_to(&mut self, p_to: Point3<f32>, dt: f32) -> bool {
-        let old_dir = (p_to - self.pos).normalize();
+        // let old_dir = (p_to - self.pos).normalize();
+
+        let old_dist = (p_to - self.pos).magnitude();
 
         self.pos += MOVE_SPEED * dt * self.dir;
 
-        // if new_dir is opposite direction from old_dir
-        // then we went through, just assign it
-        let new_dir = (p_to - self.pos).normalize();
-        if old_dir.distance(new_dir) < 0.5 {
-            false
-        } else {
+        let new_dist = (p_to - self.pos).magnitude();
+
+        if new_dist > old_dist {
             self.pos = p_to;
             true
+        } else {
+            false
         }
+
+        // if new_dir is opposite direction from old_dir
+        // then we went through, just assign it
+        // let new_dir = (p_to - self.pos).normalize();
+        // if old_dir.distance(new_dir) < 0.2 {  // not 0.5 due to float imprecision
+        //     false
+        // } else {
+        //     self.pos = p_to;
+        //     true
+        // }
+
+
+
+        // if (p_to - self.pos).magnitude() < 0.08 {
+        //     self.pos = p_to;
+        //     true
+        // } else {
+        //     false
+        // }
     }
 
     pub fn roll_to(&mut self, v_dir: Vector3<f32>, dt: f32) -> bool {

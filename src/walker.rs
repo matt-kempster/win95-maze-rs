@@ -1,4 +1,4 @@
-use rand;
+use maze::random;
 use cgmath::{vec3, Point3, Vector3};
 
 use maze::Maze;
@@ -82,7 +82,7 @@ impl<'a> Walker<'a> {
             .filter(|d| self.open(d))
             .collect();
 
-        directions.sort_unstable_by_key(|_| rand::random::<u8>());
+        directions.sort_unstable_by_key(|_| random());
 
         for d in &directions {
             if self.open(d) && (self.direction != d.opposite() ||

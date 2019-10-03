@@ -1,4 +1,15 @@
-use rand;
+pub fn random() -> u64 {
+    unsafe {
+        static mut STATE: u64 = 0x123456789abcdef2;
+        STATE = STATE.wrapping_mul(2862933555777941757)
+            .wrapping_add(3037000493);
+        STATE
+    }
+}
+
+pub fn random_f32() -> f32 {
+    ((random() as f64) / (std::u64::MAX as f64)) as f32
+}
 
 const N: u8 = 0b0001;
 const E: u8 = 0b0010;
@@ -79,7 +90,7 @@ impl Maze {
 
 fn carve_from(cx: usize, cy: usize, maze: &mut Maze) {
     let mut directions: [u8; 4] = [N, E, S, W];
-    directions.sort_unstable_by_key(|_| rand::random::<u8>());
+    directions.sort_unstable_by_key(|_| random());
 
     for d in &directions {
         let nx = match *d {
