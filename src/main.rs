@@ -221,7 +221,8 @@ fn gen_walls(maze: &Maze)  -> Vec<Wall> {
     let mut walls = Vec::new();
 
     fn get_rand_tex() -> TexType {
-        if random_f32() < 0.9 {
+        // changed < to > in v3
+        if random_f32() > 0.9 {
             TexType::Brick
         } else {
             TexType::Thing
@@ -319,8 +320,9 @@ fn sample_indices(total: usize, count: usize) -> Vec<usize> {
 
 fn gen_icos(maze: &Maze) -> HashMap<(usize, usize), Ico> {
     // let's say there is 6% of tiles with an icosahedron
+    // changed to 30% in v3
     let total = maze.width * maze.height;
-    let count = cmp::max(6 * total / 100, 2);
+    let count = cmp::max(30 * total / 100, 30);
     // let indices = rand::seq::sample_indices(
     //     &mut rand::thread_rng(), total, count);
     // let rnd_f = || rand::random::<f32>() * 2.0 - 1.0;
@@ -347,8 +349,9 @@ fn gen_icos(maze: &Maze) -> HashMap<(usize, usize), Ico> {
 
 fn gen_rats(maze: &Maze) -> Vec<Rat> {
     // let's say there is 2% of tiles with a rat initially
+    // changed to 60% for v3
     let total = maze.width * maze.height;
-    let count = cmp::max(2 * total / 100, 2);
+    let count = cmp::max(60 * total / 100, 60);
     // let indices = rand::seq::sample_indices(
     //     &mut rand::thread_rng(), total, count);
     let indices = sample_indices(total, count);

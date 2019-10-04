@@ -1,11 +1,21 @@
+// FOR VIDEO 1:
+// pub fn random() -> u64 {
+//     unsafe {
+//         static mut STATE: u64 = 0x123456789abcdef2;
+//         STATE = STATE.wrapping_mul(2862933555777941757)
+//             .wrapping_add(3037000493);
+//         STATE
+//     }
+// }
 pub fn random() -> u64 {
     unsafe {
-        static mut STATE: u64 = 0x123456789abcdef2;
+        static mut STATE: u64 = 0x223456789abcdef2;
         STATE = STATE.wrapping_mul(2862933555777941757)
             .wrapping_add(3037000493);
         STATE
     }
 }
+
 
 pub fn random_f32() -> f32 {
     ((random() as f64) / (std::u64::MAX as f64)) as f32
